@@ -9,7 +9,7 @@ import {
     ActivityIndicator,
 } from 'react-native';
 
-import { AuthContext } from '../../stateManagement/AuthContext'
+import { AuthContext } from '../../context/AuthContext'
 import { COLORS } from '../../constants/Colors'
 
 const ROLES = [

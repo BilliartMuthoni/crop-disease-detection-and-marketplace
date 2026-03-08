@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
-import { AuthContext } from '../../stateManagement/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 import { COLORS } from '../../constants/Colors';
 
 const { width } = Dimensions.get('window');

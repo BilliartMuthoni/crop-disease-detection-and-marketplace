@@ -1,2 +1,9 @@
-node_modules
-.expo
+#React-native mobile app gitignore
+sproutly-mobile/node_modules
+sproutly-mobile/.expo
+
+
+
+#Python backend gitignore
+sproutly-backend/requirements.txt
+sproutly-backend/venv

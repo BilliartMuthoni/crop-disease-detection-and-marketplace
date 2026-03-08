@@ -8,7 +8,7 @@ import {
     SafeAreaView
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { AuthContext } from '../../stateManagement/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 import { COLORS } from '../../constants/Colors';
 
 export default function ServiceProviderDashboard() {

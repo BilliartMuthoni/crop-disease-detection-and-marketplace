@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { AuthContext } from '../../stateManagement/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 import { COLORS } from '../../constants/Colors';
 
 

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { NavigationContainer, createStaticNavigation, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { AuthProvider, AuthContext } from './src/stateManagement/AuthContext.js';
+import { AuthContext } from './src/context/AuthContext';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -26,7 +26,7 @@ import ServiceProviderDashboard from './src/screens/service-provider/ServiceProv
 const Stack = createStackNavigator();
 
 const RootNavigator = () => {
-    const { userToken, isLoading } = useContext(AuthContext);
+    const {useContext, isLoading} = useContext(AuthContext);
 
     // While checking for a token in storage, show nothing (or a Splash Screen)
     if (isLoading) return <SplashScreen />;
