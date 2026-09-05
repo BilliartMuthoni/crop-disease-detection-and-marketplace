@@ -1,9 +1,20 @@
-#React-native mobile app gitignore
-sproutly-mobile/node_modules
-sproutly-mobile/.expo
+# Mobile App (React Native) 
+node_modules/
+.expo/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
+# Python Backend
+venv/
+.venv/
+.env
+__pycache__/
+*.py[cod]
+*$py.class
 
-
-#Python backend gitignore
-sproutly-backend/requirements.txt
-sproutly-backend/venv
+# System/Editor Junk
+.vscode/
+Thumbs.db
+.DS_Store
