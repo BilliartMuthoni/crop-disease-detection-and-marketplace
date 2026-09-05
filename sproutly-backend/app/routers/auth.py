@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
+from app.core.limiter import limiter
 from app.core.security import (
     hash_password,
     verify_password,
@@ -47,7 +48,8 @@ def _issue_and_store_otp(db: Session, user: User) -> None:
 
 
 @router.post("/register", response_model=OtpSentResponse, status_code=status.HTTP_201_CREATED)
-def register(payload: RegisterRequest, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def register(request: Request, payload: RegisterRequest, db: Session = Depends(get_db)):
     existing = _get_user_by_identifier(db, payload.phone_number, payload.email)
     if existing:
         raise HTTPException(
@@ -72,7 +74,8 @@ def register(payload: RegisterRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=OtpSentResponse)
-def login(payload: LoginRequest, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def login(request: Request, payload: LoginRequest, db: Session = Depends(get_db)):
     user = _get_user_by_identifier(db, payload.phone_number, payload.email)
     if not user or not user.hashed_password or not verify_password(payload.password, user.hashed_password):
         # Same error for "no such user" and "wrong password" -- never reveal which one.
@@ -86,7 +89,8 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/verify-otp", response_model=TokenResponse)
-def verify_otp_endpoint(payload: VerifyOtpRequest, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def verify_otp_endpoint(request: Request, payload: VerifyOtpRequest, db: Session = Depends(get_db)):
     user = _get_user_by_identifier(db, payload.phone_number, payload.email)
     if not user or not user.hashed_otp or not user.otp_expires_at:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No pending OTP for this account")
