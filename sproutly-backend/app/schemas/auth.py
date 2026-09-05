@@ -47,3 +47,8 @@ class TokenResponse(BaseModel):
     refresh_token: str
     token_type: str = "bearer"
     role: UserRole
+
+
+class OtpSentResponse(BaseModel):
+    message: str
+    expires_in_minutes: int
