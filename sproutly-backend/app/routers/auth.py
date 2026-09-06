@@ -20,6 +20,7 @@ from app.models.user import User
 from app.schemas.auth import (
     RegisterRequest,
     LoginRequest,
+    ResendOtpRequest,
     VerifyOtpRequest,
     TokenResponse,
     OtpSentResponse,
@@ -84,6 +85,27 @@ def login(request: Request, payload: LoginRequest, db: Session = Depends(get_db)
     _issue_and_store_otp(db, user)
     return OtpSentResponse(
         message="OTP sent for verification.",
+        expires_in_minutes=settings.otp_expire_minutes,
+    )
+
+
+@router.post("/resend-otp", response_model=OtpSentResponse)
+@limiter.limit("5/minute")
+def resend_otp(request: Request, payload: ResendOtpRequest, db: Session = Depends(get_db)):
+    user = _get_user_by_identifier(db, payload.phone_number, payload.email)
+    # Only allow a resend if there's an actual pending (unverified) OTP --
+    # otherwise this endpoint would let anyone spam OTPs to any phone number
+    # with zero proof of identity. Same generic error either way, so a caller
+    # can't use this to probe which phone numbers/emails have accounts.
+    if not user or not user.hashed_otp:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No pending verification found. Please try logging in again.",
+        )
+
+    _issue_and_store_otp(db, user)
+    return OtpSentResponse(
+        message="A new OTP has been sent.",
         expires_in_minutes=settings.otp_expire_minutes,
     )
 

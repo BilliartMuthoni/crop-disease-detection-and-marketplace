@@ -31,6 +31,10 @@ class LoginRequest(_RequiresIdentifier):
     password: str
 
 
+class ResendOtpRequest(_RequiresIdentifier):
+    pass
+
+
 class VerifyOtpRequest(_RequiresIdentifier):
     otp: str
 
